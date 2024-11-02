@@ -1,0 +1,128 @@
+src - source
+dist - distribution
+
+'src' - source code ->
+run webpack (bundle modules) ->
+'dist' directory ->
+run code.
+
+if somebody is to clone/fork directory -> src
+to deploy -> dist
+
+
+1. npm init -y
+
+2. npm install --save-dev (development dependecy) -> 
+    1. webpack -> webpack webpack-cli
+    2. webpack-dev-server
+    3. HTML -> html-webpack-plugin
+        for images -> html-loader
+    4. CSS -> style-loader css-loader
+    5. images -> 
+        1. url() -> already inlcuded in css
+        2. images with src in html -> html-loader
+            change config file
+        3. images with js -> 
+            add 'asset/resource' in config file
+    6. ' devtool: "eval-source-map" ' in config
+        matches code line no. in console
+
+
+3. webpack.config.js AND add scripts in package.json
+
+4. npx webpack (OR) use 'webpack-dev-server'
+
+5. npx webpack serve -> http://localhost:8080/
+
+note :  If you change the webpack config file while the dev server is running, it will not reflect those config changes. Use Ctrl + C in the terminal to kill it then rerun npx webpack serve to apply the new config.
+
+
+
+
+ESLINT :
+
+npm init -y
+npm init @eslint/config
+
+npx eslint script.js
+npx eslint script.js --fix
+
+
+
+PRETTIER :
+
+npm install --save-dev --save-exact prettier
+node --eval "fs.writeFileSync('.prettierrc','{}\n')"
+node --eval "fs.writeFileSync('.prettierignore','# Ignore artifacts:\nbuild\ncoverage\n')"
+
+npx prettier . --write
+
+(*) "// prettier-ignore" in js 
+
+
+
+BABEL WITHOUT WEBPACK :
+
+1. npm install --save-dev @babel/core @babel/cli
+
+2. package.json file should include:
+
+    {
+        "name": "my-project",
+        "version": "1.0.0",
+        "scripts": {
+          "build": "babel src -d lib"
+        },
+        "devDependencies": {
+          "@babel/core": "^7.0.0"
+          "@babel/cli": "^7.0.0"
+        }
+    }
+
+3. Now from our terminal we can run:
+
+npm run build
+
+This will run Babel the same way as before and the output will be present in lib directory
+
+
+4. npm install @babel/preset-env --save-dev
+
+In order to enable the preset you have to define it in your babel.config.json file, like this:
+
+    {
+      "presets": ["@babel/preset-env"]
+    }
+
+
+    You can, for example, say you don’t support IE by adding the following to your .browserlistrc file:
+
+    ->  not ie all
+
+    or that you define that you only support browsers with a market share of 0.25% or more:
+
+    ->  >0.25%
+
+BABEL with WEBPACK :-
+
+1. npm install -D babel-loader @babel/core @babel/preset-env webpack
+
+2. add into webpack config file :
+
+    module: {
+    rules: [
+        {
+        test: /\.(?:js|mjs|cjs)$/,
+        exclude: /node_modules/,
+        use: {
+            loader: 'babel-loader',
+            options: {
+            targets: "defaults",
+            presets: [
+                ['@babel/preset-env']
+            ]
+            }
+        }
+        }
+    ]
+    }
