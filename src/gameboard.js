@@ -1,4 +1,5 @@
 export { Ship, Gameboard, Player };
+// export { gb1 };
 
 class Ship {
   constructor(len) {
@@ -29,6 +30,30 @@ class Gameboard {
     this.ship3 = this.ships[2];
     this.ship4 = this.ships[3];
 
+    this.ship1.coordinates = [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+      [0, 3],
+    ];
+
+    this.ship2.coordinates = [
+      [1, 0],
+      [1, 1],
+      [1, 2],
+    ];
+
+    this.ship3.coordinates = [
+      [2, 0],
+      [2, 1],
+    ];
+
+    this.ship4.coordinates = [
+      [3, 0],
+      [3, 1],
+      [3, 2],
+    ];
+
     this.shipsSunkArray = [false, false, false, false];
     this.allShipsSunk = false;
 
@@ -43,35 +68,20 @@ class Gameboard {
 
     this.totalBoxesClicked = [];
     this.missedClicks = [];
+    this.totalHits = [];
 
     // coordinates of ship
     this.coordinates = [
-      [
-        [0, 0],
-        [0, 1],
-        [0, 2],
-        [0, 3],
-      ],
-      [
-        [1, 0],
-        [1, 1],
-        [1, 2],
-      ],
-      [
-        [2, 0],
-        [2, 1],
-      ],
-      [
-        [3, 0],
-        [3, 1],
-        [3, 2],
-      ],
+      this.ship1.coordinates,
+      this.ship2.coordinates,
+      this.ship3.coordinates,
+      this.ship4.coordinates,
     ];
   }
 
-  checkAlreadyHit(x1, y1, array = this.totalBoxesClicked) {
+  checkIfHits(x1, y1, array = this.totalBoxesClicked) {
     for (let i = 0; i < array.length; i++) {
-      if (array[i][0] === x1 && array[i][1] === y1) {
+      if (array[i][0] == x1 && array[i][1] == y1) {
         return true;
       }
     }
@@ -86,7 +96,7 @@ class Gameboard {
     }
 
     // already hit at that place
-    if (this.checkAlreadyHit(x1, y1)) {
+    if (this.checkIfHits(x1, y1)) {
       return "again";
     }
 
@@ -95,10 +105,11 @@ class Gameboard {
     // check if it hits a ship or not
     let flag = false;
     for (let i = 0; i < this.ships.length; i++) {
-      if (this.checkAlreadyHit(x1, y1, this.coordinates[i])) {
+      if (this.checkIfHits(x1, y1, this.coordinates[i])) {
         flag = true;
         this.ships[i].hit(true);
         if (this.ships[i].hasSunk()) {
+          this.totalHits.push([x1, y1]);
           this.shipsSunkArray[i] = true;
         }
         return "ok";
@@ -107,7 +118,7 @@ class Gameboard {
 
     // does not hit any ship
     if (flag === false) {
-      this.missedClicks.push(x1, y1);
+      this.missedClicks.push([x1, y1]);
       return "missed";
     }
   }

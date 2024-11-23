@@ -7,20 +7,28 @@ const getChildData = (child) => {
 const createGameboard = (half, player) => {
   const para = document.createElement("p");
   para.classList.add("board-para");
-  para.innerText = `${player}'s Turn`;
+  para.innerText = `${player}'s Board`;
   half.appendChild(para);
 
   for (let i = 0; i < 10; i++) {
     const row = document.createElement("div");
     row.classList.add("board-row");
     half.appendChild(row);
+
     for (let j = 0; j < 10; j++) {
       const child = document.createElement("div");
       child.classList.add("board-div");
       child.setAttribute("data-x", `${i}`);
       child.setAttribute("data-y", `${j}`);
       row.appendChild(child);
-      child.addEventListener("click", () => getChildData(child));
+
+      if (player === "Computer") {
+        child.classList.add("computer-board-div");
+      }
+
+      if (player === "Player") {
+        child.classList.add("player-board-div");
+      }
     }
   }
 };
