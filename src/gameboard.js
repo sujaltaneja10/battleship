@@ -1,4 +1,4 @@
-export { Ship, Gameboard, Player };
+export { Player };
 // export { gb1 };
 
 class Ship {
@@ -24,11 +24,11 @@ class Ship {
 
 class Gameboard {
   constructor() {
-    this.ships = [new Ship(4), new Ship(3), new Ship(2), new Ship(3)];
-    this.ship1 = this.ships[0];
-    this.ship2 = this.ships[1];
-    this.ship3 = this.ships[2];
-    this.ship4 = this.ships[3];
+    this.ship1 = new Ship(4);
+    this.ship2 = new Ship(3);
+    this.ship3 = new Ship(2);
+    this.ship4 = new Ship(3);
+    this.ships = [this.ship1, this.ship2, this.ship3, this.ship4];
 
     this.ship1.coordinates = [
       [0, 0],
@@ -38,20 +38,20 @@ class Gameboard {
     ];
 
     this.ship2.coordinates = [
-      [1, 0],
-      [1, 1],
-      [1, 2],
+      [2, 1],
+      [2, 2],
+      [2, 3],
     ];
 
     this.ship3.coordinates = [
-      [2, 0],
-      [2, 1],
+      [4, 2],
+      [4, 3],
     ];
 
     this.ship4.coordinates = [
-      [3, 0],
-      [3, 1],
-      [3, 2],
+      [3, 6],
+      [4, 6],
+      [5, 6],
     ];
 
     this.shipsSunkArray = [false, false, false, false];
@@ -77,6 +77,21 @@ class Gameboard {
       this.ship3.coordinates,
       this.ship4.coordinates,
     ];
+  }
+
+  findIndexOfShip(child) {
+    let shipNo = -1;
+    for (let i = 0; i < this.ships.length; i++) {
+      let array = this.ships[i].coordinates;
+      for (let j = 0; j < array.length; j++) {
+        if (array[j][0] == child.dataset.x && array[j][1] == child.dataset.y) {
+          shipNo = i;
+          break;
+        }
+      }
+      if (shipNo !== -1) break;
+    }
+    return shipNo;
   }
 
   checkIfHits(x1, y1, array = this.totalBoxesClicked) {
