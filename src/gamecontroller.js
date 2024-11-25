@@ -6,6 +6,12 @@ export { startGame };
 let player = new Player();
 let computer = new Player();
 
+let lastX = -1;
+let lastY = -1;
+let lastHit = false;
+let shipComplete = false;
+let adjacentElements = [];
+
 const startGame = () => {
   leftHalf.replaceChildren();
   rigtHalf.replaceChildren();
@@ -50,6 +56,10 @@ const attackBox = (child, playerName, actualName) => {
   let result = playerName.board.receiveAttack(child.dataset.x, child.dataset.y);
 
   if (result === "ok") {
+    if (actualName === "player") {
+      lastHit = true;
+    }
+
     child.innerText = "✔";
     child.classList.add("hit-div");
     child.classList.remove("hoverable-div");
@@ -60,6 +70,11 @@ const attackBox = (child, playerName, actualName) => {
 
     // // if ship is sunk
     if (playerName.board.shipsSunkArray[shipNo] === true) {
+      if (actualName === "player") {
+        adjacentElements = [];
+        shipComplete = true;
+      }
+
       let ship = playerName.board.ships[shipNo];
 
       // give new class to all elements of the ship
@@ -77,6 +92,10 @@ const attackBox = (child, playerName, actualName) => {
       }
     }
   } else if (result === "missed") {
+    if (actualName === "player") {
+      lastHit = false;
+    }
+
     child.innerText = "X";
     child.classList.add("missed-div");
     child.classList.remove("hoverable-div");
@@ -97,9 +116,29 @@ const computerTurn = () => {
 };
 
 const getCoordinates = () => {
-  let x1 = Math.floor(Math.random() * 10);
-  let y1 = Math.floor(Math.random() * 10);
-  return [x1, y1];
+  if (shipComplete) {
+    shipComplete = false;
+    lastX = Math.floor(Math.random() * 10);
+    lastY = Math.floor(Math.random() * 10);
+  } else if (lastHit === true) {
+    adjacentElements.push([lastX + 1, lastY]);
+    adjacentElements.push([lastX, lastY + 1]);
+    adjacentElements.push([lastX - 1, lastY]);
+    adjacentElements.push([lastX, lastY - 1]);
+  }
+  if (adjacentElements.length != 0) {
+    lastX = adjacentElements[0][0];
+    lastY = adjacentElements[0][1];
+    adjacentElements.splice(0, 1);
+  } else {
+    lastX = Math.floor(Math.random() * 10);
+    lastY = Math.floor(Math.random() * 10);
+  }
+  if (lastX >= 0 && lastX < 10 && lastY >= 0 && lastY < 10) {
+    return [lastX, lastY];
+  } else {
+    return getCoordinates();
+  }
 };
 
 const gameOver = () => {
