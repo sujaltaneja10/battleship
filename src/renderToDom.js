@@ -1,7 +1,7 @@
 import { playGameBtn, leftHalf, rigtHalf } from "./getElements";
 export { createGameboard, showWinner };
 
-const createGameboard = (half, player) => {
+const createGameboard = (half, playerName, player) => {
   const para = document.createElement("p");
   para.classList.add("board-para");
   para.innerText = `${player}'s Board`;
@@ -27,6 +27,19 @@ const createGameboard = (half, player) => {
       if (player === "Player") {
         child.classList.add("player-board-div");
       }
+    }
+  }
+
+  // give new class to all elements of the ship
+  for (let i = 0; i < playerName.board.ships.length; i++) {
+    let ship = playerName.board.ships[i];
+    let array = ship.coordinates;
+    for (let i = 0; i < array.length; i++) {
+      let element = document.querySelector(
+        `.player-board-div[data-x="${array[i][0]}"][data-y="${array[i][1]}"]`,
+      );
+      element.classList.add("showable-ship-div");
+      element.innerText = "X";
     }
   }
 };
@@ -55,7 +68,9 @@ const showWinner = (winner) => {
     rigtHalf.appendChild(sourceCodeLink);
     rigtHalf.appendChild(myGithubLink);
     rigtHalf.classList.add("winner-half");
-  } else if (winner === "Computer") {
+  }
+
+  if (winner === "Computer") {
     leftHalf.replaceChildren();
     leftHalf.appendChild(winnerScene);
     leftHalf.appendChild(playAgainButton);

@@ -59,6 +59,10 @@ main {
   height: 2rem;
   width: 3rem;
   background-color: rgba(255, 247, 247, 0.956);
+  text-align: center;
+  color: white;
+  font-family: monospace;
+  font-size: 24px;
 }
 
 .hoverable-div:hover {
@@ -82,33 +86,16 @@ main {
 
 .missed-div {
   background-color: rgba(255, 0, 0, 0.653);
-  border: 1px solid #b3b3b3;
-  height: 2rem;
-  width: 3rem;
-  text-align: center;
-  color: white;
-  font-family: monospace;
-  font-size: 24px;
 }
 
 .hit-div {
   background-color: rgba(0, 128, 0, 0.632);
-  border: 1px solid #b3b3b3;
-  height: 2rem;
-  width: 3rem;
-  text-align: center;
   font-size: 20px;
-  color: white;
 }
 
 .ship-complete-div {
   background-color: rgba(0, 110, 255, 0.701);
-  border: 1px solid #b3b3b3;
-  height: 2rem;
-  width: 3rem;
-  text-align: center;
-  font-size: 20px;
-  color: white;
+  border: 0;
 }
 
 .play-again-btn,
@@ -135,4 +122,8 @@ main {
   font-size: 24px;
   text-decoration: underline;
   font-weight: 600;
+}
+
+.showable-ship-div {
+  background-color: #3f3f3f;
 }

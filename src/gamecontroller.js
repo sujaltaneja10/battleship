@@ -9,8 +9,8 @@ let computer = new Player();
 const startGame = () => {
   leftHalf.replaceChildren();
   rigtHalf.replaceChildren();
-  createGameboard(rigtHalf, "Player");
-  createGameboard(leftHalf, "Computer");
+  createGameboard(rigtHalf, player, "Player");
+  createGameboard(leftHalf, computer, "Computer");
   startPlayerTurn();
 };
 
@@ -50,8 +50,10 @@ const attackBox = (child, playerName, actualName) => {
   let result = playerName.board.receiveAttack(child.dataset.x, child.dataset.y);
 
   if (result === "ok") {
+    child.innerText = "✔";
     child.classList.add("hit-div");
     child.classList.remove("hoverable-div");
+    child.classList.remove("showable-ship-div");
 
     // get ship number of current box
     let shipNo = playerName.board.findIndexOfShip(child);
@@ -68,6 +70,7 @@ const attackBox = (child, playerName, actualName) => {
         );
         if (element.dataset.clicked) {
           element.classList.add("ship-complete-div");
+          element.innerText = "";
           element.classList.remove("hit-div");
           element.classList.remove("hoverable-div");
         }
