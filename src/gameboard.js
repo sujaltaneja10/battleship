@@ -28,33 +28,66 @@ class Gameboard {
     this.ship2 = new Ship(3);
     this.ship3 = new Ship(2);
     this.ship4 = new Ship(3);
-    this.ships = [this.ship1, this.ship2, this.ship3, this.ship4];
-
-    this.ship1.coordinates = [
-      [0, 0],
-      [0, 1],
-      [0, 2],
-      [0, 3],
+    this.ship5 = new Ship(5);
+    this.ship6 = new Ship(5);
+    this.ships = [
+      this.ship1,
+      this.ship2,
+      this.ship3,
+      this.ship4,
+      this.ship5,
+      this.ship6,
     ];
 
-    this.ship2.coordinates = [
-      [2, 1],
-      [2, 2],
-      [2, 3],
-    ];
+    // get random coordinates of the given ship
+    const getCoordinatesOfShip = (ship, shipNo) => {
+      // get random coordinates
+      let array = [];
 
-    this.ship3.coordinates = [
-      [4, 2],
-      [4, 3],
-    ];
+      // horizontal
+      if (shipNo % 2 != 0) {
+        let x1 = Math.floor(Math.random() * 10);
+        let y1 = Math.floor(Math.random() * (10 - ship.length));
+        for (let i = 0; i < ship.length; i++) {
+          array.push([x1, y1 + i]);
+        }
+      }
+      // vertical
+      else {
+        let x1 = Math.floor(Math.random() * (10 - ship.length));
+        let y1 = Math.floor(Math.random() * 10);
+        for (let i = 0; i < ship.length; i++) {
+          array.push([x1 + i, y1]);
+        }
+      }
 
-    this.ship4.coordinates = [
-      [3, 6],
-      [4, 6],
-      [5, 6],
-    ];
+      // make sure the coordinates are not repeated.
+      for (let i = 0; i < this.coordinates.length; i++) {
+        for (let j = 0; j < this.coordinates[i].length; j++) {
+          let newArray = this.coordinates[i];
+          for (let k = 0; k < array.length; k++) {
+            if (
+              newArray[j][0] == array[k][0] &&
+              newArray[j][1] == array[k][1]
+            ) {
+              return getCoordinatesOfShip(ship, shipNo);
+            }
+          }
+        }
+      }
 
-    this.shipsSunkArray = [false, false, false, false];
+      return array;
+    };
+
+    // coordinates of ship
+    this.coordinates = [];
+
+    for (let i = 0; i < this.ships.length; i++) {
+      this.ships[i].coordinates = getCoordinatesOfShip(this.ships[i], i + 1);
+      this.coordinates.push(this.ships[i].coordinates);
+    }
+
+    this.shipsSunkArray = [false, false, false, false, false, false];
     this.allShipsSunk = false;
 
     // total points to choose from
@@ -69,14 +102,6 @@ class Gameboard {
     this.totalBoxesClicked = [];
     this.missedClicks = [];
     this.totalHits = [];
-
-    // coordinates of ship
-    this.coordinates = [
-      this.ship1.coordinates,
-      this.ship2.coordinates,
-      this.ship3.coordinates,
-      this.ship4.coordinates,
-    ];
   }
 
   findIndexOfShip(child) {

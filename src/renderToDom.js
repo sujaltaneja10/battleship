@@ -1,3 +1,4 @@
+import { cond } from "lodash";
 import { playGameBtn, leftHalf, rigtHalf } from "./getElements";
 export { createGameboard, showWinner };
 
@@ -31,6 +32,7 @@ const createGameboard = (half, playerName, player) => {
   }
 
   // give new class to all elements of the ship
+  if (player !== "Player") return;
   for (let i = 0; i < playerName.board.ships.length; i++) {
     let ship = playerName.board.ships[i];
     let array = ship.coordinates;
