@@ -23,10 +23,6 @@ class Ship {
 }
 
 class Gameboard {
-  // constructor() {
-  //   this.resetGameboard();
-  // }
-
   constructor() {
     this.ship1 = new Ship(4);
     this.ship2 = new Ship(3);
@@ -51,63 +47,77 @@ class Gameboard {
     const getCoordinatesOfShip = (ship, shipNo) => {
       // get random coordinates
       let array = [];
+      let isValid = false;
 
-      // horizontal
-      if (shipNo % 2 != 0) {
-        let x1 = Math.floor(Math.random() * 10);
-        let y1 = Math.floor(Math.random() * (10 - ship.length));
-        for (let i = 0; i < ship.length; i++) {
-          array.push([x1, y1 + i]);
-        }
-      }
-      // vertical
-      else {
-        let x1 = Math.floor(Math.random() * (10 - ship.length));
-        let y1 = Math.floor(Math.random() * 10);
-        for (let i = 0; i < ship.length; i++) {
-          array.push([x1 + i, y1]);
-        }
-      }
+      while (isValid === false) {
+        let flag = 0;
+        isValid = false;
+        array = [];
 
-      // make sure the coordinates are not repeated.
-      for (let i = 0; i < this.coordinates.length; i++) {
-        for (let j = 0; j < this.coordinates[i].length; j++) {
-          let newArray = this.coordinates[i];
-          for (let k = 0; k < array.length; k++) {
-            if (
-              newArray[j][0] == array[k][0] &&
-              newArray[j][1] == array[k][1]
-            ) {
-              return getCoordinatesOfShip(ship, shipNo);
+        // horizontal
+        if (shipNo % 2 != 0) {
+          let x1 = Math.floor(Math.random() * 10);
+          let y1 = Math.floor(Math.random() * (10 - ship.length));
+          for (let i = 0; i < ship.length; i++) {
+            array.push([x1, y1 + i]);
+          }
+        }
+        // vertical
+        else {
+          let x1 = Math.floor(Math.random() * (10 - ship.length));
+          let y1 = Math.floor(Math.random() * 10);
+          for (let i = 0; i < ship.length; i++) {
+            array.push([x1 + i, y1]);
+          }
+        }
+
+        // make sure the coordinates are not repeated.
+        for (let i = 0; i < this.coordinates.length; i++) {
+          for (let j = 0; j < this.coordinates[i].length; j++) {
+            let newArray = this.coordinates[i];
+            for (let k = 0; k < array.length; k++) {
+              if (
+                newArray[j][0] == array[k][0] &&
+                newArray[j][1] == array[k][1]
+              ) {
+                flag++;
+              }
+              if (flag > 0) break;
             }
           }
         }
-      }
 
-      // make sure ship is not placed adjacent to other ship
-      for (let i = 0; i < this.adjacentCoordinates.length; i++) {
-        for (let j = 0; j < array.length; j++) {
-          if (
-            array[j][0] == this.adjacentCoordinates[i][0] &&
-            array[j][1] == this.adjacentCoordinates[i][1]
-          ) {
-            return getCoordinatesOfShip(ship, shipNo);
+        // make sure ship is not placed adjacent to other ship
+        for (let i = 0; i < this.adjacentCoordinates.length; i++) {
+          for (let j = 0; j < array.length; j++) {
+            if (
+              array[j][0] == this.adjacentCoordinates[i][0] &&
+              array[j][1] == this.adjacentCoordinates[i][1]
+            ) {
+              flag++;
+              break;
+            }
+            if (flag > 0) break;
           }
         }
+
+        if (flag === 0) isValid = true;
       }
 
       // update adjacent coordinates of ships
       for (let i = 0; i < array.length; i++) {
         let x1 = array[i][0];
         let y1 = array[i][1];
-        this.adjacentCoordinates.push([x1 - 1, y1]);
-        this.adjacentCoordinates.push([x1, y1 - 1]);
-        this.adjacentCoordinates.push([x1 + 1, y1]);
-        this.adjacentCoordinates.push([x1, y1 + 1]);
-        this.adjacentCoordinates.push([x1 - 1, y1 - 1]);
-        this.adjacentCoordinates.push([x1 - 1, y1 + 1]);
-        this.adjacentCoordinates.push([x1 + 1, y1 - 1]);
-        this.adjacentCoordinates.push([x1 + 1, y1 + 1]);
+        this.adjacentCoordinates.push(
+          [x1 - 1, y1],
+          [x1, y1 - 1],
+          [x1 + 1, y1],
+          [x1, y1 + 1],
+          [x1 - 1, y1 - 1],
+          [x1 - 1, y1 + 1],
+          [x1 + 1, y1 - 1],
+          [x1 + 1, y1 + 1],
+        );
       }
 
       return array;
