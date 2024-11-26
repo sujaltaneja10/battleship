@@ -23,6 +23,10 @@ class Ship {
 }
 
 class Gameboard {
+  // constructor() {
+  //   this.resetGameboard();
+  // }
+
   constructor() {
     this.ship1 = new Ship(4);
     this.ship2 = new Ship(3);
@@ -38,6 +42,10 @@ class Gameboard {
       this.ship5,
       this.ship6,
     ];
+
+    // coordinates of ship
+    this.coordinates = [];
+    this.adjacentCoordinates = [];
 
     // get random coordinates of the given ship
     const getCoordinatesOfShip = (ship, shipNo) => {
@@ -76,11 +84,34 @@ class Gameboard {
         }
       }
 
+      // make sure ship is not placed adjacent to other ship
+      for (let i = 0; i < this.adjacentCoordinates.length; i++) {
+        for (let j = 0; j < array.length; j++) {
+          if (
+            array[j][0] == this.adjacentCoordinates[i][0] &&
+            array[j][1] == this.adjacentCoordinates[i][1]
+          ) {
+            return getCoordinatesOfShip(ship, shipNo);
+          }
+        }
+      }
+
+      // update adjacent coordinates of ships
+      for (let i = 0; i < array.length; i++) {
+        let x1 = array[i][0];
+        let y1 = array[i][1];
+        this.adjacentCoordinates.push([x1 - 1, y1]);
+        this.adjacentCoordinates.push([x1, y1 - 1]);
+        this.adjacentCoordinates.push([x1 + 1, y1]);
+        this.adjacentCoordinates.push([x1, y1 + 1]);
+        this.adjacentCoordinates.push([x1 - 1, y1 - 1]);
+        this.adjacentCoordinates.push([x1 - 1, y1 + 1]);
+        this.adjacentCoordinates.push([x1 + 1, y1 - 1]);
+        this.adjacentCoordinates.push([x1 + 1, y1 + 1]);
+      }
+
       return array;
     };
-
-    // coordinates of ship
-    this.coordinates = [];
 
     for (let i = 0; i < this.ships.length; i++) {
       this.ships[i].coordinates = getCoordinatesOfShip(this.ships[i], i + 1);
