@@ -121,10 +121,12 @@ const getCoordinates = () => {
     lastX = Math.floor(Math.random() * 10);
     lastY = Math.floor(Math.random() * 10);
   } else if (lastHit === true) {
-    adjacentElements.push([lastX + 1, lastY]);
-    adjacentElements.push([lastX, lastY + 1]);
-    adjacentElements.push([lastX - 1, lastY]);
-    adjacentElements.push([lastX, lastY - 1]);
+    adjacentElements.push(
+      [lastX + 1, lastY],
+      [lastX, lastY + 1],
+      [lastX - 1, lastY],
+      [lastX, lastY - 1],
+    );
   }
   if (adjacentElements.length != 0) {
     lastX = adjacentElements[0][0];

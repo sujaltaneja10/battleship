@@ -1,4 +1,3 @@
-import { cond } from "lodash";
 import { playGameBtn, leftHalf, rigtHalf } from "./getElements";
 export { createGameboard, showWinner };
 
